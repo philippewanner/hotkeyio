@@ -1,0 +1,17 @@
+{
+  "name": "hotkeyio",
+  "version": "1.0.0",
+  "description": "Personal notes and documentation",
+  "main": "index.js",
+  "repository": "git@github.com:philippewanner/hotkeyio.git",
+  "author": "Philippe Wanner <philippe.wanner@tomylab.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "vitepress": "^0.11.4"
+  },
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs"
+  }
+}

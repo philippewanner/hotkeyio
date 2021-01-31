@@ -83,6 +83,88 @@ For any list of `n`, binary search will take `log2(n)`steps to run the worst cas
 
 Binary search runs in *logarithmic time* (or *log time*, as th natives call it): O(log n), needs log n operations to check a list of size n.
 
+## Breadth-first search (BFS)
+The algorithm to solve a shortest-path problem is called breadth-first search.
+It helps answer two types of questions:
+- Question type 1: is there a path from node A to node B?
+- Question type 2: what is the shortest path from node A to node B?
+
+Use cases:
+- write a checkers AI that calculates the fewest moves to victory
+- write a spell checker (fewest edits from your misspelling to a real word - e.g READED -> READER is one edit)
+- find the doctor closest to you in your network
+
+Implementing a graph: 
+```python
+graph = {} # data structure hash table let you express relationship
+graph["you"] = ["alice", "bob", "claire"] # give you an array of all the neighbors of 'you'.
+```
+
+If you have a problem like "find the shortest X", try modeling your problem as a graph, and use breadth-first search to solve.
+
+A directed graph has arrows, and the relationship follows the direction of the arrow.
+
+Undirected graphs don't have arrows, and the relationship goes both ways.
+
+## Dijkstra's algorithm
+BFS gives not necesarily the fastest path, but the shortest (fewest) path, because it has the least number of segments.
+Dijkstra's algorithm finds the path with the smallest total weight.
+
+There are four steps to Dijstra's alorithm:
+1. Find the 'cheapest node'. This is the node you can get to in the least amount of time.
+2. Update the costs of the neighbors of this node. I.e. check whether there's a cheaper path to the neighbors of this node. If so update their costs.
+3. Repeat until you've done this for every node in the graph.
+4. Calculate the final path.
+
+Limitation:
+You can't use Dijkstra's algorithm if you have negative-weight edges. If you want to find the shortest path in a graph that has negative-weight edges, use *Bellman-Ford algorithm*.
+
+## Greedy algorithms
+A greedy algorithm is simple: at each step, pick the *optimal* move. In technical terms: *at each step you pick the locally optimal solution*, and in the end you're left with the globally optimal solution.
+Obviously, greedy algorithms don't always work. But they're simple to write!
+Sometimes, perfect is the enemy of good. Sometimes all you need is an algorithm that solves the problem pretty well. That's where greedy algorithms shine, because they're simple to write and usually get pretty close.
+
+Use cases: 
+- approximations
+- easy solution that works well but not optimal.
+
+Note: Dijkstra is a greedy algorithm.
+
+### Approximation algorithms
+Approximation algorithms are judged by:
+- how fast they are
+- how close they are to the optimal solution
+
+Greedy algorithms are a good choice because not only are they simple to come up with, but that simplicity means they usually run fast, too.
+
+### NP-complete
+NP-completness: problems famously hard to solve. The *set-covering* problem and *traveling salesperson* are two examples. There's no easy way to tell if the problem you're wofking on is NP complete. Here are some giveaways:
+- your algorithms runs quickly with a handful of items but really slows down with more items.
+- 'all combinations of X' usually point to an NP-complete problem.
+- do you have to calculate 'every possible version' of X because you can't break it down into smaller sub-problems? Might be NP-complete
+- if your problem involves a sequence (suche as a sequence of cities, lile traveling salesperson), and it's hard to solve, it might be NP-complete.
+- if your problem involves a set (like a set of radio stations) and it's hard to solve, it might be NP-complete
+- can you restate your problem as the set-covering problem or the traveling-salesperson problem? Then your problem is definitely NP-complete.
+  
+
+If the problem you're trying to solve is NP-complete: stop trying to solve it perfectly, and solve it using an approximation algorithm instead.
+
+## Dynamic programming
+Dynamic programming starts by solving subproblems and builds up to solving the big problem.
+
+Every dynamic-programming algorithm starts with a grid. The grid starts out empty. You're going to fill in each cell of the grid. Once the grid is filled in, you'll have your answer to the problem.
+
+Dynamic programming only works when each subproblems is *discrete* - when it doesn't depend on other subproblems.
+
+Dynamic programming is useful when you're trying to *optimize something given a constraint*. E.g. in the knapsack problem, you had to maximize the value of the goods you stole, constrained by the size of the knapsack.
+
+You can use dynamic programming when the problem can be broken into *discrete* subproblems, and they don't depend on each other.
+
+Some general tips:
+- Every dynamic-programming solution involves a grid.
+- The values in the cells are usually what you're trying to optimize. For the knapsack problem, the values were the value of the goods.
+- Each cell is a subproblem, so think about how you can divide your problem into subproblems. That will help you figure out what the axes are.
+
 ## Selection sort
 - input: unsorted array
 - output: sorted array
@@ -150,6 +232,15 @@ D&C isn't a simple algorithm to apply to a problem. Instead, it's a way to think
 - with a linked list, the elements aren't next to each other, so you can't instantly calculate the position of the fifth element in memory - you have to go to the first element to get the address to the second element, then go to the second element to get the address of the third element, and so on until you get to the fifth element.
 - allow sequential access: reading the elements one by one, starting at the first element. Linked lists can *only* do sequential access.
 
+## Queue
+You can't access random elements in the queue. Instead, there are two only operations, *enqueue* (or *push*) and *dequeue* (or *pop*).
+The queue is called a *FIFO* data structure: First In, First Out. In contrast, a stack is a *LIFO* data structure: Last In, First Out.
+
+```python
+from collections import deque
+search_queue = deque() # creates a new (double-ended) queue
+search_queue += graph["you"] # adds all your neighbors to the search queue
+```
 
 ## Stack
 When you insert an item, it gets added to the top of the list.
@@ -162,6 +253,8 @@ Synonyms: hash maps, maps, dictionaries, and associative arrays.
 
 A hash table maps keys to values.
 
+Hash tables have no ordering, so it doesn't matter what order you add key/value pairs in.
+
 ### Hash functions
 A hash functions is a function that maps a sequence of bytes, e.g. a string, to a number.
 
@@ -171,7 +264,7 @@ Requirements for hash functions:
 
 collision: two keys have been assigned the same slot. A good hash function has a very few collisions. To avoid collisions, you need:
 - low load factor: `nb of items in hash table / total nb of slots`. With a lower load factor, you'll have fewer collisions, and your table will perform better. Rule of thumb: resize when your load factor is greater than 0.7. Resizing means adding more slots to your hash table by creating a new array that's bigger. Rule of thumb is to make an array that is twice the size.
-- good hash function: a good hash function distributes values in the array evenly. A bad hash function groups values together and produces a lot of collisions.
+- good hash function: a good hash function distributes values in the array evenly. A bad hash function groups values together and produces a lot of collisions. E.g. `SHA`
 
 ### Use cases
 Hash tables are great when you want to:
